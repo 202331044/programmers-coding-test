@@ -1,0 +1,42 @@
+#include <vector>
+
+using namespace std;
+
+int solution(vector<vector<int>> points, vector<vector<int>> routes) {
+    int answer = 0;
+    static int arr[101][101][20001];
+    
+    for(const auto& route: routes)
+    {
+        int t = 0;
+        int row = points[route[0] - 1][0];
+        int col = points[route[0] - 1][1];
+        
+        if(++arr[row][col][t] == 2)
+            answer++;
+  
+        for(int i = 1; i < route.size(); ++i)
+        {
+            int idx = route[i] - 1;
+            int nextRow = points[idx][0];
+            int nextCol = points[idx][1];
+            
+            int dr = (row < nextRow) ? 1 : (row > nextRow ? -1 : 0);
+            while(row != nextRow)
+            {
+                row += dr;
+                if(++arr[row][col][++t] == 2)
+                    answer++;
+            }
+            
+            int dc = (col < nextCol) ? 1 : (col > nextCol ? -1 : 0);
+            while(col != nextCol)
+            {
+                col += dc;
+                if(++arr[row][col][++t] == 2)
+                    answer++;
+            }
+        }
+    }
+    return answer;
+}
